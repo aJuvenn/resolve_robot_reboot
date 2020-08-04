@@ -2,7 +2,7 @@
 
 import numpy as np
 from enum import Enum
-
+import grid_extractor
 
 
 UP = 0
@@ -13,10 +13,10 @@ RIGHT = 3
 
 NO_COLOR = 0
 
-GREEN = 1
-BLUE = 2
-YELLOW = 3
-RED = 4    
+BLUE = 1
+GREEN = 2
+RED = 3 
+YELLOW = 4
     
 
 
@@ -38,6 +38,15 @@ class Node:
         
 class Grid:
     
+    @staticmethod
+    def from_picture(file_path):
+        return grid_extractor.grid_from_picture(file_path)
+    
+    @staticmethod
+    def show_picture_processing(file_path):
+        grid_extractor.show_processing(file_path)
+    
+    
     def __init__(self, width):
         
         self.width = width
@@ -58,7 +67,6 @@ class Grid:
         self.objective_node = None
         self.objective_color = NO_COLOR
 
-    
     
     def node(self, i, j):
         return self._node_list[j + i * self.width]
