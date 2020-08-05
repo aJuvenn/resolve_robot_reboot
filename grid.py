@@ -11,13 +11,13 @@ DOWN = 2
 RIGHT = 3
 
 
-NO_COLOR = 0
 
-BLUE = 1
-GREEN = 2
-RED = 3 
-YELLOW = 4
+BLUE = 0
+GREEN = 1
+RED = 2
+YELLOW = 3
     
+NO_COLOR = 4
 
 
 def opposite_direction(direction):
@@ -34,6 +34,8 @@ class Node:
         self.objective_color = NO_COLOR 
         self.robot_color = NO_COLOR
         self.blocked_neighbours = np.zeros(4)
+
+
 
         
 class Grid:
@@ -62,10 +64,13 @@ class Grid:
             self.node(i, width-1).blocked_neighbours[RIGHT] = 1
             self.node(width-1, i).blocked_neighbours[DOWN] = 1
     
-        self.robot_nodes = [None for i in range(5)]
+        self.robot_nodes = [None for i in range(4)]
+        self.starting_robot_nodes = [None for i in range(4)]
         
         self.objective_node = None
         self.objective_color = NO_COLOR
+        
+        self._direction_to_neighbour_offset = np.array([-self.width, -1, self.width, 1], dtype=int)
 
     
     def node(self, i, j):
@@ -77,19 +82,7 @@ class Grid:
         if node.blocked_neighbours[direction] == 1:
             return None
         
-        index = node.index
-        
-        if direction == UP:
-            return self._node_list[index - self.width]
-    
-        if direction == DOWN:
-            return self._node_list[index + self.width]
-    
-        if direction == LEFT:
-            return self._node_list[index - 1]
-    
-        if direction == RIGHT:
-            return self._node_list[index + 1] 
+        return self._node_list[node.index + self._direction_to_neighbour_offset[direction]]
         
 
     def move(self, robot_color, direction):
@@ -121,7 +114,8 @@ class Grid:
         node.robot_color = robot_color
         
         if robot_color != NO_COLOR:    
-            self.robot_nodes[robot_color] = node
+            self.robot_nodes[robot_color] = node    
+            self.starting_robot_nodes[robot_color] = node
             
             
     def put_objective(self, i, j, objective_color):
@@ -148,6 +142,19 @@ class Grid:
         return self.objective_node == self.robot_nodes[self.objective_color]
         
         
+    def reset_to_starting_state(self):
+        
+        for node in self.robot_nodes:
+            node.robot_color = NO_COLOR
+            
+        for color, node in enumerate(self.starting_robot_nodes):
+            node.robot_color = color
+            self.robot_nodes[color] = node
+            
+            
+        
+            
+    
         
         
         

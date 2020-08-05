@@ -233,7 +233,7 @@ def grid_from_picture(file_path):
                                                                                   forbiden_center_indexes)
 
     for k in range(4):
-        output.put_robot(*min_robot_color_indexes[k], k+1)
+        output.put_robot(*min_robot_color_indexes[k], k)
     
     # Finding goal
 
@@ -249,7 +249,7 @@ def grid_from_picture(file_path):
     goal_color_id = np.argmin(min_goal_color_distances)
     goal_indexes = min_goal_color_indexes[goal_color_id]
     
-    output.put_objective(*goal_indexes, goal_color_id + 1)
+    output.put_objective(*goal_indexes, goal_color_id)
     
     
     return output
