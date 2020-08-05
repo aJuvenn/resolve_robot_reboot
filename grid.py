@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from enum import Enum
 import grid_extractor
+import grid_show
 
 
 UP = 0
@@ -43,12 +43,8 @@ class Grid:
     @staticmethod
     def from_picture(file_path):
         return grid_extractor.grid_from_picture(file_path)
-    
-    @staticmethod
-    def show_picture_processing(file_path):
-        grid_extractor.show_processing(file_path)
-    
-    
+
+ 
     def __init__(self, width):
         
         self.width = width
@@ -71,6 +67,13 @@ class Grid:
         self.objective_color = NO_COLOR
         
         self._direction_to_neighbour_offset = np.array([-self.width, -1, self.width, 1], dtype=int)
+
+
+    def show(self, window_name = 'Grid'):
+        grid_show.show_picture(window_name, self)    
+
+    def wait_key(self, delay):
+        grid_show.wait_key(delay)
 
     
     def node(self, i, j):
@@ -130,9 +133,9 @@ class Grid:
     def put_wall(self, i, j, direction):
         
         node = self.node(i, j)
-        node.blocked_neighbours[direction] = 1
-        
         neighbour = self.neighbour(node, direction)
+        
+        node.blocked_neighbours[direction] = 1
         
         if neighbour is not None:
             neighbour.blocked_neighbours[opposite_direction(direction)] = 1
