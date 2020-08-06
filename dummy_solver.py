@@ -156,6 +156,8 @@ if __name__ == '__main__':
 
 
     g = Grid.from_picture(sys.argv[1])
+    g.show()
+    g.wait_key(0)
     
     max_action_list_size = int(sys.argv[2])
     
