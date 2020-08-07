@@ -148,9 +148,7 @@ def grid_from_picture(file_path):
     goal_indexes = min_goal_color_indexes[goal_color_id]
     
     output.put_objective(*goal_indexes, goal_color_id)
-    
-    output.set_next_cases_from_direction()
-    
+       
     return output
 
 

@@ -80,7 +80,7 @@ def solve(g : Grid, state, state_to_max_try, state_to_solution, max_try):
     for action in allowed_actions:
     
         g.set_state(state)
-        g.quick_move(*action)
+        g.move(*action)
         sub_state = g.get_state()
             
         sub_solution = solve(g, sub_state, state_to_max_try, state_to_solution, max_try - 1)
@@ -134,6 +134,9 @@ if __name__ == '__main__':
 
 
     g = Grid.from_picture(sys.argv[1])
+    
+    print("Press any key to start solving...")
+    
     g.show(sys.argv[1])
     g.wait_key(0)
     

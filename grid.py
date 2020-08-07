@@ -71,136 +71,7 @@ class Grid:
         self.objective_color = NO_COLOR
         
         self._direction_to_neighbour_offset = np.array([-width, -1, width, 1], dtype = int)
-        
-        
-        
-    def set_next_cases_from_direction(self):
-        
-        self.next_index_from_direction = np.empty(self.width * self.width * 4, dtype = int)
-        self.next_i_from_direction = np.empty(self.width * self.width * 4, dtype = int)
-        self.next_j_from_direction = np.empty(self.width * self.width * 4, dtype = int)
-        
-        for node_index in range(self.width * self.width):
-            for direction in range(4):
-                next_index = self._step_by_step(node_index, direction)
-                self.next_index_from_direction[direction + node_index * 4] = next_index
-                self.next_i_from_direction[direction + node_index * 4] = next_index // self.width
-                self.next_j_from_direction[direction + node_index * 4] = next_index % self.width
-                
-        
-        
-        
-    def quick_move(self, robot_color, direction):
-        
-        begining_node = self.robot_nodes[robot_color] 
-        begining_index = begining_node.index
-        
-        begining_i = begining_node.i
-        begining_j = begining_node.j
-        
-        if direction == UP:
-            
-            final_i = self.next_i_from_direction[direction + begining_index * 4]
-            final_j = begining_j
-            
-            for other_color in range(4):
-                
-                if other_color == robot_color:
-                    continue
-                
-                other_node = self.robot_nodes[other_color]
-                
-                if other_node.j != begining_j:
-                    continue
-                
-                other_i = other_node.i
-                
-                if final_i < other_i < begining_i:
-                    final_i = other_i
-            
-                    
-        elif direction == DOWN:
-            
-            final_i = self.next_i_from_direction[direction + begining_index * 4]
-            final_j = begining_j
-            
-            for other_color in range(4):
-                
-                if other_color == robot_color:
-                    continue
-                
-                other_node = self.robot_nodes[other_color]
-                
-                if other_node.j != begining_j:
-                    continue
-                
-                other_i = other_node.i
-                
-                if begining_i < other_i < final_i:
-                    final_i = other_i            
-            
-        elif direction == LEFT:
-            
-            final_j = self.next_j_from_direction[direction + begining_index * 4]
-            final_i = begining_i
-            
-            for other_color in range(4):
-                
-                if other_color == robot_color:
-                    continue
-                
-                other_node = self.robot_nodes[other_color]
-                
-                if other_node.i != begining_i:
-                    continue
-                
-                other_j = other_node.j
-                
-                if final_j < other_j < begining_j:
-                    final_j = other_j     
-                    
-                    
-        elif direction == RIGHT:
-            
-            final_j = self.next_j_from_direction[direction + begining_index * 4]
-            final_i = begining_i
-            
-            for other_color in range(4):
-                
-                if other_color == robot_color:
-                    continue
-                
-                other_node = self.robot_nodes[other_color]
-                
-                if other_node.i != begining_i:
-                    continue
-                
-                other_j = other_node.j
-                
-                if begining_j < other_j < final_j:
-                    final_j = other_j                          
-                    
-        
-        final_node = self.node_list[final_j + final_i * self.width]    
-        begining_node.robot_color = NO_COLOR
-        final_node.robot_color = robot_color
-        self.robot_nodes[robot_color] = final_node
-    
-    
-    
-    
-    
-    def _step_by_step(self, node_index, direction):
-        
-        final_node = self.node_list[node_index]
-        direction_to_neighbour_offset = self._direction_to_neighbour_offset[direction]
-            
-        while final_node.blocked_neighbours[direction] == 0: 
-            final_node = self.node_list[final_node.index + direction_to_neighbour_offset]
-           
-        return final_node.index
-        
-       
+             
 
     def get_state(self):
         
@@ -214,11 +85,8 @@ class Grid:
     
     def set_state(self, state):
         
-        for i, node in enumerate(self.robot_nodes):
-            node.robot_color = NO_COLOR
-            self.robot_nodes[i] = None
-            
         for color_id in range(4):
+            self.robot_nodes[color_id].robot_color = NO_COLOR
             node_index = state % 256
             node = self.node_list[node_index]
             node.robot_color = color_id
