@@ -69,27 +69,28 @@ def solve(g : Grid, state, state_to_max_try, state_to_solution, max_try):
     if state_max_try >= max_try:
         return None
     
+    state_to_max_try[state] = max_try
+    
     g.set_state(state)
     allowed_actions = g.allowed_actions()
     
     found_sub_solution = None
     found_action = None
-    
+     
     for action in allowed_actions:
-        
+    
         g.set_state(state)
-        g.move(*action)
+        g.quick_move(*action)
         sub_state = g.get_state()
-        
+            
         sub_solution = solve(g, sub_state, state_to_max_try, state_to_solution, max_try - 1)
-        
+            
         if sub_solution is not None:
             if found_sub_solution is None or len(sub_solution) < len(found_sub_solution):
                 found_sub_solution = sub_solution
                 found_action = action
     
     if found_sub_solution is None:
-        state_to_max_try[state] = max_try
         return None
     
     output = [found_action] + found_sub_solution

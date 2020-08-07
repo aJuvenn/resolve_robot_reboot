@@ -149,6 +149,7 @@ def grid_from_picture(file_path):
     
     output.put_objective(*goal_indexes, goal_color_id)
     
+    output.set_next_cases_from_direction()
     
     return output
 
